@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPA & Final Grade Calculator</title>
+    <a href="index.html"><button>Go Home</button></a>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        td, th {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            font-size: 18px;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>GPA & Final Grade Calculator</h1>
+
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Grade (%)</th>
+                    <th>Final Weight (%)</th>
+                    <th>Target Grade (%)</th>
+                    <th>Grade to Get On Final (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Class 1</td>
+                    <td><input type="number" id="grade1" min="0" required></td>
+                    <td><input type="number" id="finalWeight1" min="0" max="100" required></td>
+                    <td><input type="number" id="targetGrade1" min="0" max="100" required></td>
+                    <td><input type="text" id="requiredFinal1" readonly></td>
+                </tr>
+                <tr>
+                    <td>Class 2</td>
+                    <td><input type="number" id="grade2" min="0" required></td>
+                    <td><input type="number" id="finalWeight2" min="0" max="100" required></td>
+                    <td><input type="number" id="targetGrade2" min="0" max="100" required></td>
+                    <td><input type="text" id="requiredFinal2" readonly></td>
+                </tr>
+                <tr>
+                    <td>Class 3</td>
+                    <td><input type="number" id="grade3" min="0" required></td>
+                    <td><input type="number" id="finalWeight3" min="0" max="100" required></td>
+                    <td><input type="number" id="targetGrade3" min="0" max="100" required></td>
+                    <td><input type="text" id="requiredFinal3" readonly></td>
+                </tr>
+                <tr>
+                    <td>Class 4</td>
+                    <td><input type="number" id="grade4" min="0" required></td>
+                    <td><input type="number" id="finalWeight4" min="0" max="100" required></td>
+                    <td><input type="number" id="targetGrade4" min="0" max="100" required></td>
+                    <td><input type="text" id="requiredFinal4" readonly></td>
+                </tr>
+                <tr>
+                    <td>Class 5</td>
+                    <td><input type="number" id="grade5" min="0" required></td>
+                    <td><input type="number" id="finalWeight5" min="0" max="100" required></td>
+                    <td><input type="number" id="targetGrade5" min="0" max="100" required></td>
+                    <td><input type="text" id="requiredFinal5" readonly></td>
+                </tr>
+                <tr>
+                    <td>Class 6</td>
+                    <td><input type="number" id="grade6" min="0" required></td>
+                    <td><input type="number" id="finalWeight6" min="0" max="100" required></td>
+                    <td><input type="number" id="targetGrade6" min="0" max="100" required></td>
+                    <td><input type="text" id="requiredFinal6" readonly></td>
+                </tr>
+                <tr>
+                    <td>Class 7</td>
+                    <td><input type="number" id="grade7" min="0" required></td>
+                    <td><input type="number" id="finalWeight7" min="0" max="100" required></td>
+                    <td><input type="number" id="targetGrade7" min="0" max="100" required></td>
+                    <td><input type="text" id="requiredFinal7" readonly></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button onclick="calculateGPA()">Calculate GPA & Required Final Grades</button>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function checkGrade(grade) {
+            return (grade > 100) ? 5.0 : (grade / 20);  // Convert to GPA scale or 5.0 for over 100%
+        }
+
+        function calculateGPA() {
+            let totalGPA = 0;
+            let count = 0;
+
+            // Loop through each class to calculate GPA and required final grade
+            for (let i = 1; i <= 7; i++) {
+                let grade = parseFloat(document.getElementById(`grade${i}`).value);
+                let finalWeight = parseFloat(document.getElementById(`finalWeight${i}`).value);
+                let targetGrade = parseFloat(document.getElementById(`targetGrade${i}`).value);
+
+                // Check if inputs are valid
+                if (isNaN(grade) || grade < 0 || grade > 100 ||
+                    isNaN(finalWeight) || finalWeight < 0 || finalWeight > 100 ||
+                    isNaN(targetGrade) || targetGrade < 0 || targetGrade > 100) {
+                    alert(`Please enter valid values for Class ${i}`);
+                    return;
+                }
+
+                // Convert grade to GPA scale
+                let gpa = checkGrade(grade);
+                totalGPA += gpa;
+                count++;
+
+                // Calculate the required final grade to reach target
+                let finalGradeRequired = (targetGrade - (grade * (1 - finalWeight / 100))) / (finalWeight / 100);
+                if (finalGradeRequired > 100) finalGradeRequired = 100;
+                if (finalGradeRequired < 0) finalGradeRequired = 0;
+
+                document.getElementById(`requiredFinal${i}`).value = finalGradeRequired.toFixed(2);
+            }
+
+            // Calculate the average GPA for all classes
+            let gpa = totalGPA / count;
+            document.getElementById('result').innerText = "Your GPA is: " + gpa.toFixed(2);
+        }
+    </script>
+
+</body>
+</html>

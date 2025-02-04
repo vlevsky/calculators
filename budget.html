@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget Calculator</title>
+  <a href="index.html"><button>Go Home</button></a>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      text-align: center;
+    }
+    label {
+      margin-top: 10px;
+    }
+    input, select {
+      padding: 10px;
+      margin-top: 5px;
+      width: 100%;
+      max-width: 300px;
+      display: block;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      background-color: #e7f4e4;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Budget Calculator</h1>
+  <label for="salary">Your Current Yearly Salary:</label>
+  <input type="number" id="salary" placeholder="Enter your yearly salary" required>
+
+  <label for="savings">Your Current Savings:</label>
+  <input type="number" id="savings" placeholder="Enter your current savings" required>
+
+  <label for="age">Your Current Age:</label>
+  <input type="number" id="age" placeholder="Enter your current age" required>
+
+  <label for="targetAge">Target Retirement Age:</label>
+  <input type="number" id="targetAge" placeholder="Enter your target age" required>
+
+  <label for="goal">Your Financial Goal ($):</label>
+  <input type="number" id="goal" placeholder="Enter your financial goal" required>
+
+  <button onclick="calculateIncome()">Calculate</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function calculateIncome() {
+      const salary = parseFloat(document.getElementById('salary').value);
+      const savings = parseFloat(document.getElementById('savings').value);
+      const age = parseInt(document.getElementById('age').value);
+      const targetAge = parseInt(document.getElementById('targetAge').value);
+      const goal = parseFloat(document.getElementById('goal').value);
+
+      // Check if all inputs are valid
+      if (isNaN(salary) || isNaN(savings) || isNaN(age) || isNaN(targetAge) || isNaN(goal)) {
+        document.getElementById('result').innerText = 'Please enter valid values in all fields.';
+        return;
+      }
+
+      if (targetAge <= age) {
+        document.getElementById('result').innerText = 'Target retiremet age must be greater than your current age.';
+        return;
+      }
+
+      // Calculate the total years left
+      const yearsLeft = targetAge - age;
+
+      // Calculate how much more savings are needed
+      const additionalSavingsNeeded = goal - savings;
+
+      // Calculate how much they need to save per year
+      const requiredIncomePerYear = additionalSavingsNeeded / yearsLeft;
+
+      // Display the result
+      document.getElementById('result').innerText = `To reach your goal of $${goal} by age ${targetAge}, you need to save $${requiredIncomePerYear.toFixed(2)} per year.`;
+    }
+  </script>
+</body>
+</html>
