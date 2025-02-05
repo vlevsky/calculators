@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Calculator</title>
+    <a href="index.html"><button>Go Home</button></a>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #e0f2f7; /* Light blue background */
+        }
+        h1 {
+            text-align: center;
+            color: #4a148c; /* Dark purple heading */
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #673ab7; /* Purple labels */
+        }
+        input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ce93d8; /* Light purple border */
+            margin-bottom: 10px;
+            background-color: #f3e5f5; /* Very light purple background for inputs */
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #7e57c2; /* Medium purple button */
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #673ab7; /* Darker purple on hover */
+        }
+        .result {
+            font-size: 18px;
+            margin-top: 20px;
+            text-align: center;
+            color: #4a148c; /* Dark purple result text */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Investment Calculator</h1>
+
+    <div class="container">
+        <label for="initial">Initial Amount:</label>
+        <input type="number" id="initial" required>
+
+        <label for="rate">Annual Interest Rate (%):</label>
+        <input type="number" id="rate" required>
+
+        <label for="months">Months Invested For:</label>
+        <input type="number" id="months" required>
+
+        <label for="compounding">Compounding Frequency:</label>
+        <select id="compounding">
+            <option value="1">Annually</option>
+            <option value="2">Semi-Annually</option>
+            <option value="4">Quarterly</option>
+            <option value="12">Monthly</option>
+            <option value="52">Weekly</option>
+            <option value="365">Daily</option>
+        </select>
+
+        <button onclick="calculateInvestment()">Calculate Ending Balance</button>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculateInvestment() {
+            let initial = parseFloat(document.getElementById("initial").value);
+            let rate = parseFloat(document.getElementById("rate").value) / 100;
+            let months = parseFloat(document.getElementById("months").value);
+            let compounding = parseInt(document.getElementById("compounding").value);
+
+            if (isNaN(initial) || initial < 0 || isNaN(rate) || rate < 0 || isNaN(months) || months < 0) {
+                alert("Please enter valid positive numbers for all fields.");
+                return;
+            }
+
+            let endingBalance = initial * (1 + rate / compounding) ** (compounding * months / 12);
+
+            document.getElementById("result").innerText = "Ending Balance: $" + endingBalance.toFixed(2);
+        }
+    </script>
+
+</body>
+</html>
