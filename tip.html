@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tip Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 24px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #555;
+            text-align: left;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input[type="number"]:focus {
+            border-color: #28a745;
+            outline: none;
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .result {
+            margin-top: 25px;
+            font-size: 18px;
+            color: #333;
+            text-align: left;
+        }
+        .result p {
+            margin: 10px 0;
+        }
+        .highlight {
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html"><button>Go Home</button></a>
+<div class="container">
+    <h2>Tip Calculator</h2>
+    <label for="billAmount">Bill Amount ($):</label>
+    <input type="number" id="billAmount" placeholder="Enter bill amount">
+
+    <label for="tipPercentage">Tip Percentage (%):</label>
+    <input type="number" id="tipPercentage" placeholder="Enter tip percentage">
+
+    <label for="numPeople">Split Bill Among:</label>
+    <input type="number" id="numPeople" placeholder="Number of people" min="1">
+
+    <button onclick="calculateTip()">Calculate Tip</button>
+
+    <div class="result" id="result">
+        <!-- Results will be displayed here -->
+    </div>
+</div>
+
+<script>
+    function calculateTip() {
+        // Get the bill amount, tip percentage, and number of people
+        const billAmount = parseFloat(document.getElementById('billAmount').value);
+        const tipPercentage = parseFloat(document.getElementById('tipPercentage').value);
+        const numPeople = parseInt(document.getElementById('numPeople').value);
+
+        // Check if the inputs are valid numbers
+        if (isNaN(billAmount) || isNaN(tipPercentage) || isNaN(numPeople) || numPeople < 1) {
+            document.getElementById('result').innerHTML = "<p>Please enter valid numbers.</p>";
+            return;
+        }
+
+        // Calculate the tip and total amount
+        const tipAmount = (billAmount * tipPercentage) / 100;
+        const totalAmount = billAmount + tipAmount;
+        const amountPerPerson = totalAmount / numPeople;
+
+        // Display the result
+        document.getElementById('result').innerHTML = `
+            <p>Tip Amount: <span class="highlight">$${tipAmount.toFixed(2)}</span></p>
+            <p>Total Amount: <span class="highlight">$${totalAmount.toFixed(2)}</span></p>
+            <p>Amount per Person: <span class="highlight">$${amountPerPerson.toFixed(2)}</span></p>
+        `;
+    }
+</script>
+
+</body>
+</html>
