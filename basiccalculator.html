@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <a href="index.html"><button>Go Home</button></a>
+    <title>Basic Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            margin: 0;
+        }
+
+        .calculator {
+            width: 320px;
+            background: #222;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+        .display {
+            width: 100%;
+            height: 50px;
+            background: #000;
+            color: lime;
+            text-align: right;
+            padding: 10px;
+            font-size: 1.5em;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        button {
+            padding: 15px;
+            font-size: 1.2em;
+            border: none;
+            background: #444;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background: #666;
+            transform: scale(1.1);
+        }
+        .special {
+            background: #ff9800;
+        }
+        .history {
+            width: 320px;
+            background: #333;
+            padding: 10px;
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 0.9em;
+        }
+        .history button {
+            width: 100%;
+            margin-top: 10px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <div class="buttons">
+            <button onclick="clearDisplay()">C</button>
+            <button onclick="appendValue('(')">(</button>
+            <button onclick="appendValue(')')">)</button>
+            <button class="special" onclick="appendValue('/')">/</button>
+            <button onclick="appendValue('7')">7</button>
+            <button onclick="appendValue('8')">8</button>
+            <button onclick="appendValue('9')">9</button>
+            <button class="special" onclick="appendValue('*')">*</button>
+            <button onclick="appendValue('4')">4</button>
+            <button onclick="appendValue('5')">5</button>
+            <button onclick="appendValue('6')">6</button>
+            <button class="special" onclick="appendValue('-')">-</button>
+            <button onclick="appendValue('1')">1</button>
+            <button onclick="appendValue('2')">2</button>
+            <button onclick="appendValue('3')">3</button>
+            <button class="special" onclick="appendValue('+')">+</button>
+            <button onclick="appendValue('0')">0</button>
+            <button onclick="appendValue('.')">.</button>
+            <button onclick="calculate()">=</button>
+        </div>
+    </div>
+    <div class="history">
+        <p>Calculation History:</p>
+        <div id="history-list"></div>
+        <button onclick="clearHistory()">Clear History</button>
+    </div>
+    <script>
+        document.addEventListener("keydown", function(event) {
+            const key = event.key;
+            if (/[0-9\.\+\-\*\/\(\)]/.test(key)) {
+                appendValue(key);
+            } else if (key === "Enter") {
+                calculate();
+            } else if (key === "Backspace") {
+                let display = document.getElementById("display");
+                display.textContent = display.textContent.slice(0, -1) || "0";
+            } else if (key === "Escape") {
+                clearDisplay();
+            }
+        });
+        function clearDisplay() {
+            document.getElementById('display').textContent = '0';
+        }
+        function appendValue(value) {
+            let display = document.getElementById('display');
+            if (display.textContent === '0') {
+                display.textContent = value;
+            } else {
+                display.textContent += value;
+            }
+        }
+        function calculate() {
+            try {
+                let result = eval(document.getElementById('display').textContent);
+                document.getElementById('display').textContent = result;
+                addToHistory(result);
+            } catch {
+                document.getElementById('display').textContent = 'Error';
+            }
+        }
+        function addToHistory(entry) {
+            let historyList = document.getElementById('history-list');
+            let newEntry = document.createElement('div');
+            newEntry.textContent = entry;
+            historyList.appendChild(newEntry);
+        }
+        function clearHistory() {
+            document.getElementById('history-list').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
