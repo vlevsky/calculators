@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roman Numeral Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input[type="number"] {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 80%;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .result {
+      margin-top: 20px;
+    }
+
+    .result h2 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .result p {
+      font-size: 24px;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .home-button {
+      margin-bottom: 20px;
+    }
+
+    .home-button a {
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="home-button">
+      <a href="index.html"><button>Go Home</button></a>
+    </div>
+    <h1>Roman Numeral Converter</h1>
+    <input type="number" id="numberInput" placeholder="Enter a number (1-3999)" min="1" max="3999">
+    <button onclick="convertToRoman()">Convert</button>
+    <div class="result">
+      <h2>Result:</h2>
+      <p id="output"></p>
+    </div>
+  </div>
+
+  <script>
+    // Function to convert integer to Roman numeral
+    function intToRoman(num) {
+      const val = [
+        1000, 900, 500, 400,
+        100, 90, 50, 40,
+        10, 9, 5, 4,
+        1
+      ];
+      const syms = [
+        "M", "CM", "D", "CD",
+        "C", "XC", "L", "XL",
+        "X", "IX", "V", "IV",
+        "I"
+      ];
+      let roman = '';
+      for (let i = 0; i < val.length; i++) {
+        while (num >= val[i]) {
+          roman += syms[i];
+          num -= val[i];
+        }
+      }
+      return roman;
+    }
+
+    // Function to handle conversion and display result
+    function convertToRoman() {
+      const input = document.getElementById('numberInput').value;
+      const number = parseInt(input, 10);
+
+      // Validate input
+      if (isNaN(number) || number < 1 || number > 3999) {
+        alert('Please enter a number between 1 and 3999.');
+        return;
+      }
+
+      // Convert to Roman numeral
+      const romanNumeral = intToRoman(number);
+      document.getElementById('output').textContent = romanNumeral;
+    }
+  </script>
+</body>
+</html>
