@@ -3,103 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Time Difference Calculator</title>
+  <title>Roman Numeral Converter</title>
   <style>
-    /* General Styles */
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
-      color: #fff;
     }
 
     .container {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       text-align: center;
-      max-width: 500px;
+      max-width: 400px;
       width: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     h1 {
       margin-bottom: 20px;
-      font-size: 2.5rem;
-      color: #fff;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      color: #333;
     }
 
-    .current-time {
-      margin-bottom: 20px;
-      font-size: 1.2rem;
-      color: #e0e0e0;
-    }
-
-    input[type="datetime-local"] {
-      padding: 12px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
+    input[type="number"] {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
       width: 80%;
       margin-bottom: 20px;
-      background: rgba(255, 255, 255, 0.2);
-      color: #fff;
-      outline: none;
-    }
-
-    input[type="datetime-local"]::placeholder {
-      color: #ccc;
     }
 
     button {
-      padding: 12px 24px;
-      font-size: 1rem;
-      background: linear-gradient(135deg, #ff6f61, #ff3b3f);
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
       color: #fff;
       border: none;
-      border-radius: 8px;
+      border-radius: 5px;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s;
     }
 
     button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
-    }
-
-    button:active {
-      transform: translateY(0);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      background-color: #0056b3;
     }
 
     .result {
       margin-top: 20px;
-      text-align: left;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
     .result h2 {
       margin-bottom: 10px;
-      font-size: 1.5rem;
-      color: #fff;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+      color: #333;
     }
 
     .result p {
-      font-size: 1rem;
-      margin: 5px 0;
-      color: #e0e0e0;
+      font-size: 24px;
+      font-weight: bold;
+      color: #007bff;
     }
 
     .home-button {
@@ -109,27 +76,6 @@
     .home-button a {
       text-decoration: none;
     }
-
-    .home-button button {
-      background: linear-gradient(135deg, #00c6ff, #0072ff);
-      margin-bottom: 20px;
-    }
-
-    /* Animations */
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .container {
-      animation: fadeIn 0.8s ease-out;
-    }
   </style>
 </head>
 <body>
@@ -137,85 +83,54 @@
     <div class="home-button">
       <a href="index.html"><button>Go Home</button></a>
     </div>
-    <h1>Time Difference Calculator</h1>
-    <div class="current-time">
-      <strong>Current Date and Time:</strong> <span id="currentDateTime"></span>
-    </div>
-    <input type="datetime-local" id="datetimeInput">
-    <button onclick="calculateTimeDifference()">Calculate</button>
+    <h1>Roman Numeral Converter</h1>
+    <input type="number" id="numberInput" placeholder="Enter a number (1-3999)" min="1" max="3999">
+    <button onclick="convertToRoman()">Convert</button>
     <div class="result">
       <h2>Result:</h2>
-      <p id="timeDifferenceResult"></p>
+      <p id="output"></p>
     </div>
   </div>
 
   <script>
-    // Function to display the current date and time
-    function displayCurrentDateTime() {
-      const now = new Date();
-      const options = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-      };
-      document.getElementById('currentDateTime').textContent = now.toLocaleString('en-US', options);
+    // Function to convert integer to Roman numeral
+    function intToRoman(num) {
+      const val = [
+        1000, 900, 500, 400,
+        100, 90, 50, 40,
+        10, 9, 5, 4,
+        1
+      ];
+      const syms = [
+        "M", "CM", "D", "CD",
+        "C", "XC", "L", "XL",
+        "X", "IX", "V", "IV",
+        "I"
+      ];
+      let roman = '';
+      for (let i = 0; i < val.length; i++) {
+        while (num >= val[i]) {
+          roman += syms[i];
+          num -= val[i];
+        }
+      }
+      return roman;
     }
 
-    // Update the current date and time every second
-    setInterval(displayCurrentDateTime, 1000);
-    displayCurrentDateTime(); // Initial call
+    // Function to handle conversion and display result
+    function convertToRoman() {
+      const input = document.getElementById('numberInput').value;
+      const number = parseInt(input, 10);
 
-    // Function to calculate the time difference
-    function calculateTimeDifference() {
-      const datetimeInput = document.getElementById('datetimeInput').value;
-      if (!datetimeInput) {
-        alert('Please select a date and time.');
+      // Validate input
+      if (isNaN(number) || number < 1 || number > 3999) {
+        alert('Please enter a number between 1 and 3999.');
         return;
       }
 
-      const selectedDateTime = new Date(datetimeInput);
-      const currentDateTime = new Date();
-      const timeDifference = currentDateTime - selectedDateTime; // Difference in milliseconds
-
-      // Calculate time differences
-      const milliseconds = timeDifference;
-      const seconds = Math.floor(timeDifference / 1000);
-      const minutes = Math.floor(seconds / 60);
-      const hours = Math.floor(minutes / 60);
-      const days = Math.floor(hours / 24);
-      const weeks = Math.floor(days / 7);
-      const months = Math.floor(days / 30); // Approximation
-      const years = Math.floor(days / 365); // Approximation
-
-      // Format the selected date and time
-      const options = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-      };
-      const formattedSelectedDateTime = selectedDateTime.toLocaleString('en-US', options);
-
-      // Display the result
-      const result = `It has been:
-        <br>${milliseconds} milliseconds,
-        <br>${seconds} seconds,
-        <br>${minutes} minutes,
-        <br>${hours} hours,
-        <br>${days} days,
-        <br>${weeks} weeks,
-        <br>${months} months,
-        <br>${years} years
-        <br>since ${formattedSelectedDateTime}.`;
-
-      document.getElementById('timeDifferenceResult').innerHTML = result;
+      // Convert to Roman numeral
+      const romanNumeral = intToRoman(number);
+      document.getElementById('output').textContent = romanNumeral;
     }
   </script>
 </body>
