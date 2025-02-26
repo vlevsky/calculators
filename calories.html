@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorie Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #008080; /* Teal background */
+            color: #fff;
+        }
+        .container {
+            background-color: #004d4d; /* Dark teal container */
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            color: #b2d8d8; /* Light teal text */
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #b2d8d8;
+        }
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #b2d8d8;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #006666;
+            color: #fff;
+        }
+        input::placeholder {
+            color: #ccc;
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #00b3b3; /* Bright teal */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #008080; /* Darker teal */
+        }
+        .result {
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+            color: #b2d8d8;
+        }
+        .result span {
+            font-weight: bold;
+            color: #fff;
+        }
+        .activity-levels {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #b2d8d8;
+        }
+        .activity-levels ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+        }
+        .activity-levels li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html"><button>Go Home</button></a>
+        <h1>Calorie Calculator</h1>
+        <label for="age">Age:</label>
+        <input type="number" id="age" placeholder="Enter your age" min="0" step="1">
+        <label for="weight">Weight (lbs):</label>
+        <input type="number" id="weight" placeholder="Enter your weight" min="0" step="0.1">
+        <label for="height">Height (in):</label>
+        <input type="number" id="height" placeholder="Enter your height" min="0" step="0.1">
+        <label for="activity">Activity Level:</label>
+        <select id="activity">
+            <option value="1.2">Sedentary (little or no exercise)</option>
+            <option value="1.375">Lightly Active (light exercise/sports 1-3 days/week)</option>
+            <option value="1.55">Moderately Active (moderate exercise/sports 3-5 days/week)</option>
+            <option value="1.725">Very Active (hard exercise/sports 6-7 days/week)</option>
+            <option value="1.9">Extra Active (very hard exercise/sports & physical job)</option>
+        </select>
+        <button onclick="calculateCalories()">Calculate Calories</button>
+        <div class="result" id="result"></div>
+        <div class="activity-levels">
+            <p><strong>Activity Levels:</strong></p>
+            <ul>
+                <li><strong>Sedentary:</strong> Little or no exercise.</li>
+                <li><strong>Lightly Active:</strong> Light exercise/sports 1-3 days/week.</li>
+                <li><strong>Moderately Active:</strong> Moderate exercise/sports 3-5 days/week.</li>
+                <li><strong>Very Active:</strong> Hard exercise/sports 6-7 days/week.</li>
+                <li><strong>Extra Active:</strong> Very hard exercise/sports & physical job.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function calculateCalories() {
+            const age = parseInt(document.getElementById('age').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const activity = parseFloat(document.getElementById('activity').value);
+            const resultDiv = document.getElementById('result');
+
+            if (isNaN(age) || age <= 0 || isNaN(weight) || weight <= 0 || isNaN(height) || height <= 0) {
+                resultDiv.innerHTML = "Please enter valid age, weight, and height.";
+                return;
+            }
+
+            // Convert height from inches to centimeters (1 in = 2.54 cm)
+            const heightCm = height * 2.54;
+            // Convert weight from pounds to kilograms (1 lb = 0.453592 kg)
+            const weightKg = weight * 0.453592;
+
+            // Calculate BMR (Basal Metabolic Rate) using Mifflin-St Jeor Equation
+            let bmr;
+            if (age <= 0) {
+                resultDiv.innerHTML = "Please enter a valid age.";
+                return;
+            }
+            if (age < 18) {
+                // For younger individuals, use a simplified formula
+                bmr = 88.362 + (13.397 * weightKg) + (4.799 * heightCm) - (5.677 * age);
+            } else {
+                // For adults
+                bmr = 10 * weightKg + 6.25 * heightCm - 5 * age + 5;
+            }
+
+            // Adjust BMR based on activity level
+            const minCalories = Math.floor(bmr * activity * 0.9); // 10% below
+            const maxCalories = Math.floor(bmr * activity * 1.1); // 10% above
+
+            resultDiv.innerHTML = `
+                Your daily calorie intake should be between:<br>
+                <span>${minCalories} kcal</span> (minimum) and <span>${maxCalories} kcal</span> (maximum).
+            `;
+        }
+    </script>
+</body>
+</html>
