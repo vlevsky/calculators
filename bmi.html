@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #4a0000; /* Dark red background */
+            color: #fff;
+        }
+        .container {
+            background-color: #800000; /* Maroon container */
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            color: #ffcccb; /* Light red text */
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #ffcccb;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ffcccb;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #4a0000;
+            color: #fff;
+        }
+        input::placeholder {
+            color: #ccc;
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #b22222; /* Firebrick red */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #8b0000; /* Darker red */
+        }
+        .result {
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+            color: #ffcccb;
+        }
+        .result span {
+            font-weight: bold;
+            color: #fff;
+        }
+        .converter-link {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #ffcccb;
+        }
+        .converter-link a {
+            color: #ffcccb;
+            text-decoration: underline;
+        }
+        .converter-link a:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html"><button>Go Home</button></a>
+        <h1>BMI Calculator</h1>
+        <label for="age">Age:</label>
+        <input type="number" id="age" placeholder="Enter your age" min="0" step="1">
+        <label for="weight">Weight (lbs):</label>
+        <input type="number" id="weight" placeholder="Enter your weight" min="0" step="0.1">
+        <label for="height">Height (in):</label>
+        <input type="number" id="height" placeholder="Enter your height" min="0" step="0.1">
+        <button onclick="calculateBMI()">Calculate BMI</button>
+        <div class="result" id="result"></div>
+        <div class="converter-link">
+            Need to convert units? <a href="https://converter.vzgadgets.com/" target="_blank">Click here</a>.
+        </div>
+    </div>
+
+    <script>
+        function calculateBMI() {
+            const age = parseInt(document.getElementById('age').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const resultDiv = document.getElementById('result');
+
+            if (isNaN(age) || age <= 0 || isNaN(weight) || weight <= 0 || isNaN(height) || height <= 0) {
+                resultDiv.innerHTML = "Please enter valid age, weight, and height.";
+                return;
+            }
+
+            // Convert weight from pounds to kilograms (1 lb = 0.453592 kg)
+            const weightKg = weight * 0.453592;
+            // Convert height from inches to meters (1 in = 0.0254 m)
+            const heightM = height * 0.0254;
+
+            const bmi = (weightKg / (heightM * heightM)).toFixed(2);
+            let classification = '';
+
+            if (bmi < 16) {
+                classification = 'Severely Underweight';
+            } else if (bmi >= 16 && bmi < 16.9) {
+                classification = 'Moderately Underweight';
+            } else if (bmi >= 17 && bmi < 18.4) {
+                classification = 'Mildly Underweight';
+            } else if (bmi >= 18.5 && bmi < 24.9) {
+                classification = 'Normal weight';
+            } else if (bmi >= 25 && bmi < 29.9) {
+                classification = 'Overweight';
+            } else if (bmi >= 30 && bmi < 34.9) {
+                classification = 'Obese Class I (Moderately Obese)';
+            } else if (bmi >= 35 && bmi < 39.9) {
+                classification = 'Obese Class II (Severely Obese)';
+            } else {
+                classification = 'Obese Class III (Very Severely Obese)';
+            }
+
+            resultDiv.innerHTML = `
+                Your BMI is: <span>${bmi}</span><br>
+                Classification: <span>${classification}</span><br>
+                Age: <span>${age}</span>
+            `;
+        }
+    </script>
+</body>
+</html>
