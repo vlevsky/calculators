@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running Pace Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ff6f61; /* Vibrant orange background */
+            color: #fff;
+        }
+        .container {
+            background-color: #4a4a4a; /* Dark gray container */
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            color: #ffcc00; /* Bright yellow text */
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #ffcc00;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ffcc00;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #4a4a4a;
+            color: #fff;
+        }
+        input::placeholder {
+            color: #ccc;
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #ffcc00; /* Bright yellow */
+            color: #4a4a4a;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #e6b800; /* Darker yellow */
+        }
+        .result {
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+            color: #ffcc00;
+        }
+        .result span {
+            font-weight: bold;
+            color: #fff;
+        }
+        .pace-info {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #ffcc00;
+        }
+        .pace-info ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+        }
+        .pace-info li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html"><button>Go Home</button></a>
+        <h1>Running Pace Calculator</h1>
+        <label for="distance">Distance (miles):</label>
+        <input type="number" id="distance" placeholder="Enter distance" min="0" step="0.1">
+        <label for="time">Time (minutes):</label>
+        <input type="number" id="time" placeholder="Enter time" min="0" step="0.1">
+        <button onclick="calculatePace()">Calculate Pace</button>
+        <div class="result" id="result"></div>
+        <div class="pace-info">
+            <p><strong>Pace Definitions:</strong></p>
+            <ul>
+                <li><strong>Walking Pace:</strong> 15–20 minutes per mile.</li>
+                <li><strong>Running Pace:</strong> 8–12 minutes per mile.</li>
+                <li><strong>Sprint Pace:</strong> 5–7 minutes per mile.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function calculatePace() {
+            const distance = parseFloat(document.getElementById('distance').value);
+            const time = parseFloat(document.getElementById('time').value);
+            const resultDiv = document.getElementById('result');
+
+            if (isNaN(distance) || distance <= 0 || isNaN(time) || time <= 0) {
+                resultDiv.innerHTML = "Please enter valid distance and time.";
+                return;
+            }
+
+            // Calculate pace in minutes per mile
+            const pace = time / distance;
+
+            // Classify pace
+            let walkingPace = (pace >= 15 && pace <= 20);
+            let runningPace = (pace >= 8 && pace <= 12);
+            let sprintPace = (pace >= 5 && pace <= 7);
+
+            let paceType;
+            if (walkingPace) {
+                paceType = "Walking Pace";
+            } else if (runningPace) {
+                paceType = "Running Pace";
+            } else if (sprintPace) {
+                paceType = "Sprint Pace";
+            } else {
+                paceType = "Custom Pace";
+            }
+
+            resultDiv.innerHTML = `
+                Your pace is: <span>${pace.toFixed(2)} minutes per mile</span><br>
+                Classification: <span>${paceType}</span>.
+            `;
+        }
+    </script>
+</body>
+</html>
