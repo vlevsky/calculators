@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Rate Zone Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #6a0dad; /* Purple background */
+            color: #fff;
+        }
+        .container {
+            background-color: #4b0082; /* Dark purple container */
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            color: #ffd700; /* Gold text */
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ffd700;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #4b0082;
+            color: #fff;
+        }
+        input::placeholder {
+            color: #ccc;
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #ffd700; /* Gold */
+            color: #4b0082;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #e6c200; /* Darker gold */
+        }
+        .result {
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+            color: #ffd700;
+        }
+        .result span {
+            font-weight: bold;
+            color: #fff;
+        }
+        .zone-info {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #ffd700;
+        }
+        .zone-info ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+        }
+        .zone-info li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html"><button>Go Home</button></a>
+        <h1>Heart Rate Zone Calculator</h1>
+        <label for="age">Age:</label>
+        <input type="number" id="age" placeholder="Enter your age" min="0" step="1">
+        <label for="restingHR">Resting Heart Rate (bpm):</label>
+        <input type="number" id="restingHR" placeholder="Enter resting heart rate" min="0" step="1">
+        <button onclick="calculateZones()">Calculate Zones</button>
+        <div class="result" id="result"></div>
+        <div class="zone-info">
+            <p><strong>Heart Rate Zones:</strong></p>
+            <ul>
+                <li><strong>Zone 1 (Warm-up):</strong> 50–60% of max HR</li>
+                <li><strong>Zone 2 (Fat Burn):</strong> 60–70% of max HR</li>
+                <li><strong>Zone 3 (Aerobic):</strong> 70–80% of max HR</li>
+                <li><strong>Zone 4 (Anaerobic):</strong> 80–90% of max HR</li>
+                <li><strong>Zone 5 (Max Effort):</strong> 90–100% of max HR</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function calculateZones() {
+            const age = parseInt(document.getElementById('age').value);
+            const restingHR = parseInt(document.getElementById('restingHR').value);
+            const resultDiv = document.getElementById('result');
+
+            if (isNaN(age) || age <= 0 || isNaN(restingHR) || restingHR <= 0) {
+                resultDiv.innerHTML = "Please enter valid age and resting heart rate.";
+                return;
+            }
+
+            // Calculate maximum heart rate (MHR) using the common formula: 220 - age
+            const maxHR = 220 - age;
+
+            // Calculate heart rate reserve (HRR) using the Karvonen Formula
+            const hrr = maxHR - restingHR;
+
+            // Calculate target heart rate zones
+            const zone1 = Math.round((hrr * 0.5) + restingHR);
+            const zone2 = Math.round((hrr * 0.6) + restingHR);
+            const zone3 = Math.round((hrr * 0.7) + restingHR);
+            const zone4 = Math.round((hrr * 0.8) + restingHR);
+            const zone5 = Math.round((hrr * 0.9) + restingHR);
+
+            resultDiv.innerHTML = `
+                Your target heart rate zones are:<br>
+                <span>Zone 1 (Warm-up):</span> ${zone1}–${zone2 - 1} bpm<br>
+                <span>Zone 2 (Fat Burn):</span> ${zone2}–${zone3 - 1} bpm<br>
+                <span>Zone 3 (Aerobic):</span> ${zone3}–${zone4 - 1} bpm<br>
+                <span>Zone 4 (Anaerobic):</span> ${zone4}–${zone5 - 1} bpm<br>
+                <span>Zone 5 (Max Effort):</span> ${zone5}–${maxHR} bpm
+            `;
+        }
+    </script>
+</body>
+</html>
