@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Body Fat Percentage Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #228b22; /* Forest green background */
+            color: #fff;
+        }
+        .container {
+            background-color: #006400; /* Dark green container */
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            color: #adff2f; /* Green-yellow text */
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #adff2f;
+        }
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #adff2f;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #006400;
+            color: #fff;
+        }
+        input::placeholder {
+            color: #ccc;
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #adff2f; /* Green-yellow */
+            color: #006400;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #9acd32; /* Darker green-yellow */
+        }
+        .result {
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+            color: #adff2f;
+        }
+        .result span {
+            font-weight: bold;
+            color: #fff;
+        }
+        .fat-info {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #adff2f;
+        }
+        .fat-info ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+        }
+        .fat-info li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html"><button>Go Home</button></a>
+        <h1>Body Fat Percentage Calculator</h1>
+        <label for="gender">Gender:</label>
+        <select id="gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+        <label for="age">Age:</label>
+        <input type="number" id="age" placeholder="Enter your age" min="0" step="1">
+        <label for="weight">Weight (lbs):</label>
+        <input type="number" id="weight" placeholder="Enter your weight" min="0" step="0.1">
+        <label for="height">Height (in):</label>
+        <input type="number" id="height" placeholder="Enter your height" min="0" step="0.1">
+        <label for="waist">Waist Circumference (in):</label>
+        <input type="number" id="waist" placeholder="Enter waist size" min="0" step="0.1">
+        <button onclick="calculateBodyFat()">Calculate Body Fat</button>
+        <div class="result" id="result"></div>
+        <div class="fat-info">
+            <p><strong>Body Fat Categories:</strong></p>
+            <ul>
+                <li><strong>Essential Fat:</strong> 2–5% (Men), 10–13% (Women)</li>
+                <li><strong>Athletes:</strong> 6–13% (Men), 14–20% (Women)</li>
+                <li><strong>Fitness:</strong> 14–17% (Men), 21–24% (Women)</li>
+                <li><strong>Average:</strong> 18–24% (Men), 25–31% (Women)</li>
+                <li><strong>Obese:</strong> 25%+ (Men), 32%+ (Women)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function calculateBodyFat() {
+            const gender = document.getElementById('gender').value;
+            const age = parseInt(document.getElementById('age').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const waist = parseFloat(document.getElementById('waist').value);
+            const resultDiv = document.getElementById('result');
+
+            if (isNaN(age) || age <= 0 || isNaN(weight) || weight <= 0 || isNaN(height) || height <= 0 || isNaN(waist) || waist <= 0) {
+                resultDiv.innerHTML = "Please enter valid age, weight, height, and waist size.";
+                return;
+            }
+
+            let bodyFat;
+            if (gender === "male") {
+                // U.S. Navy Body Fat Formula for men
+                bodyFat = 86.010 * Math.log10(waist - height) - 70.041 * Math.log10(height) + 36.76;
+            } else {
+                // U.S. Navy Body Fat Formula for women
+                bodyFat = 163.205 * Math.log10(waist + height - height) - 97.684 * Math.log10(height) - 78.387;
+            }
+
+            resultDiv.innerHTML = `
+                Your estimated body fat percentage is: <span>${bodyFat.toFixed(2)}%</span>.
+            `;
+        }
+    </script>
+</body>
+</html>
