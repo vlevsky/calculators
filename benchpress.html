@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bench Press Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #b22222; /* Firebrick red background */
+            color: #fff;
+        }
+        .container {
+            background-color: #000; /* Black container */
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            color: #ffd700; /* Gold text */
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ffd700;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #000;
+            color: #fff;
+        }
+        input::placeholder {
+            color: #ccc;
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #ffd700; /* Gold */
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #e6c200; /* Darker gold */
+        }
+        .result {
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+            color: #ffd700;
+        }
+        .result span {
+            font-weight: bold;
+            color: #fff;
+        }
+        .workout-info {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #ffd700;
+        }
+        .workout-info ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+        }
+        .workout-info li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html"><button>Go Home</button></a>
+        <h1>Bench Press Calculator</h1>
+        <label for="weight">Weight Lifted (lbs):</label>
+        <input type="number" id="weight" placeholder="Enter weight" min="0" step="0.1">
+        <label for="reps">Reps Completed:</label>
+        <input type="number" id="reps" placeholder="Enter reps" min="1" step="1">
+        <button onclick="calculateMax()">Calculate Max</button>
+        <div class="result" id="result"></div>
+        <div class="workout-info">
+            <p><strong>Workout Recommendations:</strong></p>
+            <ul>
+                <li><strong>Light Workout:</strong> 50–60% of 1RM for 10–15 reps.</li>
+                <li><strong>Intense Workout:</strong> 75–85% of 1RM for 4–8 reps.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function calculateMax() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const reps = parseInt(document.getElementById('reps').value);
+            const resultDiv = document.getElementById('result');
+
+            if (isNaN(weight) || weight <= 0 || isNaN(reps) || reps <= 0) {
+                resultDiv.innerHTML = "Please enter valid weight and reps.";
+                return;
+            }
+
+            // Calculate one-rep max (1RM) using the Epley Formula
+            const oneRepMax = Math.round(weight * (1 + (reps / 30)));
+
+            // Calculate light and intense workout ranges
+            const lightMin = Math.round(oneRepMax * 0.5);
+            const lightMax = Math.round(oneRepMax * 0.6);
+            const intenseMin = Math.round(oneRepMax * 0.75);
+            const intenseMax = Math.round(oneRepMax * 0.85);
+
+            resultDiv.innerHTML = `
+                Your estimated one-rep max (1RM) is: <span>${oneRepMax} lbs</span><br>
+                <strong>Light Workout:</strong> ${lightMin}–${lightMax} lbs for 10–15 reps.<br>
+                <strong>Intense Workout:</strong> ${intenseMin}–${intenseMax} lbs for 4–8 reps.
+            `;
+        }
+    </script>
+</body>
+</html>
