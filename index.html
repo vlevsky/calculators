@@ -11,7 +11,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             background: linear-gradient(135deg, #1e3c72, #2a5298);
             color: white;
             margin: 0;
@@ -47,27 +47,79 @@
         .nav-buttons button:active {
             transform: scale(0.95);
         }
+        details {
+            width: 80%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        summary {
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 10px;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            border-radius: 8px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease;
+        }
+        summary:hover {
+            background: linear-gradient(135deg, #e68900, #e64a19);
+        }
+        .category-content {
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
     <h1>Calculators</h1>
-    <div class="nav-buttons">
-        <button onclick="window.location.href='basiccalculator.html'">Basic Calculator</button>
-        <button onclick="window.location.href='gpa.html'">GPA (Grades) Calculator</button>
-        <button onclick="window.location.href='randomnumbers.html'">Random Number Generator</button>
-        <button onclick="window.location.href='budget.html'">Budget Calculator</button>
-        <button onclick="window.location.href='calories.html'">Calories Calculator</button>
-        <button onclick="window.location.href='bmi.html'">BMI (Body Mass) Calculator</button>
-        <button onclick="window.location.href='tip.html'">Tip Calculator</button>
-        <button onclick="window.location.href='apy.html'">APY (Interest) Calculator</button>
-        <button onclick="window.location.href='heartratezone.html'">Heart Rate Zone Calculator</button>
-        <button onclick="window.location.href='water.html'">Water Intake Calculator</button>
-        <button onclick="window.location.href='timedifference.html'">Time Difference Calculator</button>
-        <button onclick="window.location.href='benchpress.html'">Bench 1RM (One Rep Max) Calculator</button>
-        <button onclick="window.location.href='runningpace.html'">Running Pace Calculator</button>
-        <button onclick="window.location.href='romannumerals.html'">Roman Numeral Converter</button>
-        <button onclick="window.location.href='bodyfat.html'">Body Fat Calculator</button>
-        <button onclick="window.location.href='textcounter.html'">Text Counter</button>
-    </div>
+
+    <!-- General Calculators -->
+    <details>
+        <summary>General Calculators</summary>
+        <div class="category-content nav-buttons">
+            <button onclick="window.location.href='basiccalculator.html'">Basic Calculator</button>
+            <button onclick="window.location.href='randomnumbers.html'">Random Number Generator</button>
+            <button onclick="window.location.href='timedifference.html'">Time Difference Calculator</button>
+            <button onclick="window.location.href='romannumerals.html'">Roman Numeral Converter</button>
+            <button onclick="window.location.href='textcounter.html'">Text Counter</button>
+        </div>
+    </details>
+
+    <!-- Health & Fitness Calculators -->
+    <details>
+        <summary>Health & Fitness Calculators</summary>
+        <div class="category-content nav-buttons">
+            <button onclick="window.location.href='bmi.html'">BMI (Body Mass) Calculator</button>
+            <button onclick="window.location.href='calories.html'">Calories Calculator</button>
+            <button onclick="window.location.href='heartratezone.html'">Heart Rate Zone Calculator</button>
+            <button onclick="window.location.href='water.html'">Water Intake Calculator</button>
+            <button onclick="window.location.href='benchpress.html'">Bench 1RM (One Rep Max) Calculator</button>
+            <button onclick="window.location.href='runningpace.html'">Running Pace Calculator</button>
+            <button onclick="window.location.href='bodyfat.html'">Body Fat Calculator</button>
+        </div>
+    </details>
+
+    <!-- Financial Calculators -->
+    <details>
+        <summary>Financial Calculators</summary>
+        <div class="category-content nav-buttons">
+            <button onclick="window.location.href='budget.html'">Budget Calculator</button>
+            <button onclick="window.location.href='tip.html'">Tip Calculator</button>
+            <button onclick="window.location.href='apy.html'">APY (Interest) Calculator</button>
+        </div>
+    </details>
+
+    <!-- Academic Calculators -->
+    <details>
+        <summary>Academic Calculators</summary>
+        <div class="category-content nav-buttons">
+            <button onclick="window.location.href='gpa.html'">GPA (Grades) Calculator</button>
+        </div>
+    </details>
 </body>
 </html>
