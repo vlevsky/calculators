@@ -84,6 +84,16 @@
         .converter-link a:hover {
             color: #fff;
         }
+        .classifications {
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            color: #ffcccb;
+            text-align: left;
+            display: none;
+        }
+        .classifications.show {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -99,6 +109,25 @@
         <button onclick="calculateBMI()">Calculate BMI</button>
         <div class="result" id="result"></div>
         <p>Does not take muscle mass into account!</p>
+        <button onclick="toggleClassifications()">Show BMI Classifications</button>
+        <div class="classifications" id="classifications">
+            <h3>BMI Classifications:</h3>
+            <ul>
+                <li><span>Under 14</span> - Critically Underweight</li>
+                <li><span>14 - 15.9</span> - Extremely Underweight</li>
+                <li><span>16 - 16.9</span> - Severely Underweight</li>
+                <li><span>17 - 18.4</span> - Moderately Underweight</li>
+                <li><span>18.5 - 24.9</span> - Normal weight</li>
+                <li><span>25 - 29.9</span> - Overweight</li>
+                <li><span>30 - 34.9</span> - Obese Class I (Moderately Obese)</li>
+                <li><span>35 - 39.9</span> - Obese Class II (Severely Obese)</li>
+                <li><span>40 - 44.9</span> - Obese Class III (Very Severely Obese)</li>
+                <li><span>45 - 49.9</span> - Obese Class IV (Morbidly Obese)</li>
+                <li><span>50 - 54.9</span> - Obese Class V (Super Obese)</li>
+                <li><span>55 - 59.9</span> - Obese Class VI (Hyper Obese)</li>
+                <li><span>60 and above</span> - Obese Class VII (Ultra Obese)</li>
+            </ul>
+        </div>
         <div class="converter-link">
             Need to convert units? <a href="https://converter.vzgadgets.com/" target="_blank">Click here</a>.
         </div>
@@ -124,12 +153,14 @@
             const bmi = (weightKg / (heightM * heightM)).toFixed(2);
             let classification = '';
 
-            if (bmi < 16) {
-                classification = 'Severely Underweight';
+            if (bmi < 14) {
+                classification = 'Critically Underweight';
+            } else if (bmi >= 14 && bmi < 15.9) {
+                classification = 'Extremely Underweight';
             } else if (bmi >= 16 && bmi < 16.9) {
-                classification = 'Moderately Underweight';
+                classification = 'Severely Underweight';
             } else if (bmi >= 17 && bmi < 18.4) {
-                classification = 'Mildly Underweight';
+                classification = 'Moderately Underweight';
             } else if (bmi >= 18.5 && bmi < 24.9) {
                 classification = 'Normal weight';
             } else if (bmi >= 25 && bmi < 29.9) {
@@ -138,8 +169,16 @@
                 classification = 'Obese Class I (Moderately Obese)';
             } else if (bmi >= 35 && bmi < 39.9) {
                 classification = 'Obese Class II (Severely Obese)';
-            } else {
+            } else if (bmi >= 40 && bmi < 44.9) {
                 classification = 'Obese Class III (Very Severely Obese)';
+            } else if (bmi >= 45 && bmi < 49.9) {
+                classification = 'Obese Class IV (Morbidly Obese)';
+            } else if (bmi >= 50 && bmi < 54.9) {
+                classification = 'Obese Class V (Super Obese)';
+            } else if (bmi >= 55 && bmi < 59.9) {
+                classification = 'Obese Class VI (Hyper Obese)';
+            } else {
+                classification = 'Obese Class VII (Ultra Obese)';
             }
 
             resultDiv.innerHTML = `
@@ -147,6 +186,11 @@
                 Classification: <span>${classification}</span><br>
                 Age: <span>${age}</span>
             `;
+        }
+
+        function toggleClassifications() {
+            const classificationsDiv = document.getElementById('classifications');
+            classificationsDiv.classList.toggle('show');
         }
     </script>
 </body>
