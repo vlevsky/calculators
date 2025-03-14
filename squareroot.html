@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Square Root Calculator</title>
+    <style>
+        /* Global Styles */
+        :root {
+            --primary-color: #1e3c72;
+            --secondary-color: #2a5298;
+            --text-color: #ffffff;
+            --button-color: #1e90ff;
+            --hover-button-color: #0073e6;
+            --glow-color: rgba(30, 144, 255, 0.4);
+            --hover-glow-color: rgba(30, 144, 255, 0.8);
+            --transition-duration: 0.3s;
+            --border-radius: 15px;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 20px var(--glow-color);
+            animation: fadeInUp 1s ease-in-out;
+        }
+
+        .calculator-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 400px;
+            width: 100%;
+            animation: fadeInUp 1.2s ease-in-out;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: 2px solid var(--button-color);
+            border-radius: var(--border-radius);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            margin-bottom: 20px;
+            transition: border-color var(--transition-duration) ease;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--hover-button-color);
+            outline: none;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color);
+            background: var(--button-color);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all var(--transition-duration) ease;
+        }
+
+        button:hover {
+            background: var(--hover-button-color);
+            box-shadow: 0 0 20px var(--hover-glow-color);
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(1);
+        }
+
+        #result {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 20px;
+            color: var(--text-color);
+            text-shadow: 0 0 10px var(--glow-color);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .calculator-container {
+                padding: 20px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html"><button>Go Home</button></a>
+    <h1>Square Root Calculator</h1>
+    <div class="calculator-container">
+        <input type="number" id="numberInput" placeholder="Enter a number">
+        <div class="buttons">
+            <button onclick="calculateSquare()">Square</button>
+            <button onclick="calculateSquareRoot()">Square Root</button>
+        </div>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function calculateSquare() {
+            const input = document.getElementById('numberInput').value;
+            const number = parseFloat(input);
+            if (!isNaN(number)) {
+                const square = number * number;
+                document.getElementById('result').innerText = `Square: ${square}`;
+            } else {
+                document.getElementById('result').innerText = 'Please enter a valid number.';
+            }
+        }
+
+        function calculateSquareRoot() {
+            const input = document.getElementById('numberInput').value;
+            const number = parseFloat(input);
+            if (!isNaN(number) && number >= 0) {
+                const squareRoot = Math.sqrt(number).toFixed(4);
+                document.getElementById('result').innerText = `Square Root: ${squareRoot}`;
+            } else {
+                document.getElementById('result').innerText = 'Please enter a non-negative number.';
+            }
+        }
+    </script>
+</body>
+</html>
