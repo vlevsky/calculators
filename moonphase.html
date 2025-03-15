@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moon Phase Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            background-color: #222222;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(30, 144, 255, 0.4);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        label {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        input[type="date"] {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 2px solid #1E90FF;
+            background-color: #333333;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .moon-phase {
+            margin-top: 20px;
+            font-size: 1.5rem;
+        }
+
+        .moon-phase p {
+            margin: 5px 0;
+        }
+
+        .next-phases {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .next-phases h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .next-phases ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .next-phases li {
+            margin: 5px 0;
+        }
+    
+        .home-btn {
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            border: none;
+            background: linear-gradient(135deg, navy, gray);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .home-btn:hover {
+            background: linear-gradient(135deg, darkblue, darkgray);
+            transform: scale(1.05);
+        }
+
+        .home-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html"><button class="home-btn">Go Home</button></a>
+    <h1>Moon Phase Calculator</h1>
+    <div class="container">
+        <label for="dateInput">Select a Date:</label>
+        <input type="date" id="dateInput" value="">
+        
+        <div class="moon-phase" id="currentPhase">
+            <p id="phaseText"></p>
+            <p id="phaseEmoji"></p>
+            <p id="phaseType"></p>
+        </div>
+
+        <div class="next-phases">
+            <h2>Next Phases:</h2>
+            <ul id="nextPhases"></ul>
+        </div>
+    </div>
+
+    <script>
+        // Moon phase emojis
+        const moonEmojis = {
+            "New Moon": "🌑",
+            "Waxing Crescent": "🌒",
+            "First Quarter": "🌓",
+            "Waxing Gibbous": "🌔",
+            "Full Moon": "🌕",
+            "Waning Gibbous": "🌖",
+            "Last Quarter": "🌗",
+            "Waning Crescent": "🌘"
+        };
+
+        // Moon phase calculation function
+        function getMoonPhase(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            const day = date.getDate();
+
+            // Calculate the Julian Date
+            let a = Math.floor((14 - month) / 12);
+            let y = year + 4800 - a;
+            let m = month + 12 * a - 3;
+            let jd = day + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
+
+            // Calculate the moon phase (0-1)
+            const phase = (jd - 2451550.1) / 29.530588853;
+            const normalizedPhase = phase - Math.floor(phase);
+
+            // Determine the moon phase name
+            if (normalizedPhase < 0.03 || normalizedPhase >= 0.97) return "New Moon";
+            else if (normalizedPhase < 0.22) return "Waxing Crescent";
+            else if (normalizedPhase < 0.28) return "First Quarter";
+            else if (normalizedPhase < 0.47) return "Waxing Gibbous";
+            else if (normalizedPhase < 0.53) return "Full Moon";
+            else if (normalizedPhase < 0.72) return "Waning Gibbous";
+            else if (normalizedPhase < 0.78) return "Last Quarter";
+            else return "Waning Crescent";
+        }
+
+        // Function to calculate the next occurrences of each moon phase
+        function getNextPhases(date) {
+            const phases = ["New Moon", "Waxing Crescent", "First Quarter", "Waxing Gibbous", "Full Moon", "Waning Gibbous", "Last Quarter", "Waning Crescent"];
+            const nextPhases = {};
+
+            for (const phase of phases) {
+                let currentDate = new Date(date);
+                while (getMoonPhase(currentDate) !== phase) {
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                nextPhases[phase] = new Date(currentDate);
+            }
+
+            return nextPhases;
+        }
+
+        // Function to update the display
+        function updateMoonPhase(date) {
+            const today = new Date();
+            const isToday = date.toDateString() === today.toDateString();
+
+            const phase = getMoonPhase(date);
+            const nextPhases = getNextPhases(date);
+
+            // Update phase text, emoji, and type
+            const phaseText = isToday ? "Current Moon Phase:" : "The moon phase will be:";
+            document.getElementById("phaseText").textContent = phaseText;
+            document.getElementById("phaseEmoji").textContent = moonEmojis[phase];
+            document.getElementById("phaseType").textContent = phase; // Display the type of moon
+
+            // Update next phases
+            const nextPhasesList = document.getElementById("nextPhases");
+            nextPhasesList.innerHTML = "";
+            for (const [phaseName, phaseDate] of Object.entries(nextPhases)) {
+                const li = document.createElement("li");
+                li.textContent = `${moonEmojis[phaseName]} ${phaseName}: ${phaseDate.toDateString()}`;
+                nextPhasesList.appendChild(li);
+            }
+        }
+
+        // Event listener for date input
+        document.getElementById("dateInput").addEventListener("change", (e) => {
+            const selectedDate = new Date(e.target.value);
+            updateMoonPhase(selectedDate);
+        });
+
+        // Initialize with today's date
+        const today = new Date();
+        document.getElementById("dateInput").value = today.toISOString().split("T")[0];
+        updateMoonPhase(today);
+    </script>
+</body>
+</html>
