@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Carbon Footprint Calculator</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .calculator {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 450px;
+            animation: slideIn 1s ease-in-out;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-size: 1.1em;
+            color: #ff9800;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1em;
+            border: none;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #e68900, #e64a19);
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .classification {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .tree-equivalent {
+            margin-top: 15px;
+            font-size: 1.1em;
+            color: #ff9800;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html"><button>Go Home</button></a>
+    <h1>Flight Carbon Footprint Calculator</h1>
+    <div class="calculator">
+        <label for="distance">Flight Distance (in miles):</label>
+        <input type="number" id="distance" placeholder="Enter distance">
+
+        <label for="class">Travel Class:</label>
+        <select id="class">
+            <option value="economy">Economy Class</option>
+            <option value="business">Business Class</option>
+            <option value="first">First Class</option>
+        </select>
+
+        <button onclick="calculateFootprint()">Calculate Carbon Footprint</button>
+
+        <div class="result" id="result"></div>
+        <div class="classification" id="classification"></div>
+        <div class="tree-equivalent" id="treeEquivalent"></div>
+    </div>
+
+    <script>
+        // Emission factors (kg CO2 per mile per passenger)
+        const emissionFactors = {
+            economy: 0.15,  // Economy class
+            business: 0.25, // Business class
+            first: 0.35     // First class
+        };
+
+        // Carbon footprint classifications
+        const classifications = [
+            { range: [0, 50], level: "Very Low", color: "#4CAF50" },
+            { range: [51, 100], level: "Low", color: "#8BC34A" },
+            { range: [101, 200], level: "Moderate", color: "#CDDC39" },
+            { range: [201, 300], level: "Medium", color: "#FFEB3B" },
+            { range: [301, 400], level: "High", color: "#FFC107" },
+            { range: [401, 500], level: "Very High", color: "#FF9800" },
+            { range: [501, 600], level: "Extremely High", color: "#FF5722" },
+            { range: [601, 700], level: "Terrible", color: "#F44336" },
+            { range: [701, 800], level: "Severe", color: "#E91E63" },
+            { range: [801, 900], level: "Dangerous", color: "#9C27B0" },
+            { range: [901, 1000], level: "Extreme", color: "#673AB7" },
+            { range: [1001, 1175], level: "Perilous", color: "#AF8A1D" },
+            { range: [1176, 1400], level: "Catistrophic", color: "AF1D1D" },
+            { range: [1401, Infinity], level: "Deathly", color: "690606" }
+        ];
+
+        // Tree equivalent calculation (1 tree absorbs ~21.77 kg CO2 per year)
+        const CO2_PER_TREE = 21.77;
+
+        function calculateFootprint() {
+            const distance = parseFloat(document.getElementById('distance').value);
+            const travelClass = document.getElementById('class').value;
+
+            if (isNaN(distance) || distance <= 0) {
+                alert("Please enter a valid flight distance.");
+                return;
+            }
+
+            const emissionFactor = emissionFactors[travelClass];
+            const carbonFootprint = (distance * emissionFactor).toFixed(2);
+
+            // Calculate tree equivalent
+            const treesEquivalent = (carbonFootprint / CO2_PER_TREE).toFixed(2);
+
+            // Determine classification
+            let classification = classifications.find(c => carbonFootprint >= c.range[0] && carbonFootprint <= c.range[1]);
+
+            // Display results
+            document.getElementById('result').innerHTML = `
+                Your flight carbon footprint is: <br>
+                <span style="color: #ff9800;">${carbonFootprint} kg CO2</span>
+            `;
+
+            document.getElementById('classification').innerHTML = `
+                Classification: <br>
+                <span style="color: ${classification.color};">${classification.level}</span>
+            `;
+            document.getElementById('classification').style.backgroundColor = `${classification.color}20`;
+
+            document.getElementById('treeEquivalent').innerHTML = `
+                Equivalent to cutting down: <br>
+                <span style="color: #ff9800;">${treesEquivalent} trees</span>
+            `;
+        }
+    </script>
+</body>
+</html>
