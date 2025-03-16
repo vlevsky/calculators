@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sales Tax Calculator</title>
+    <style>
+      /* General Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2); /* Light gradient background */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        color: #333;
+      }
+
+      .calculator-container {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 2.5rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        animation: fadeIn 1s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        color: #333;
+        font-weight: 600;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .input-group {
+        margin-bottom: 1.5rem;
+        text-align: left;
+      }
+
+      .input-group label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: #555;
+      }
+
+      .input-group input,
+      .input-group select {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        font-size: 1rem;
+        background: rgba(255, 255, 255, 0.8);
+        color: #333;
+        transition: all 0.3s ease;
+      }
+
+      .input-group input:focus,
+      .input-group select:focus {
+        border-color: #ff6f61; /* Coral color */
+        outline: none;
+        box-shadow: 0 0 10px rgba(255, 111, 97, 0.3);
+        background: rgba(255, 255, 255, 1);
+      }
+
+      .rate-display {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        color: #555;
+      }
+
+      .rate-display span {
+        font-weight: 600;
+        color: #ff6f61; /* Coral color */
+      }
+
+      .results {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
+        box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.1),
+          inset -5px -5px 10px rgba(255, 255, 255, 0.5);
+      }
+
+      .results p {
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+        color: #333;
+      }
+
+      .results p span {
+        font-weight: 600;
+        color: #ff6f61; /* Coral color */
+      }
+
+      button {
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(135deg, #ff6f61, #ff9a9e); /* Coral gradient */
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(255, 111, 97, 0.3);
+        position: relative;
+        overflow: hidden;
+      }
+
+      button::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 300%;
+        height: 300%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent);
+        transform: translate(-50%, -50%) scale(0);
+        transition: transform 0.5s ease;
+      }
+
+      button:hover::before {
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255, 111, 97, 0.4);
+      }
+
+      button:active {
+        transform: translateY(0);
+        box-shadow: 0 5px 15px rgba(255, 111, 97, 0.3);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 480px) {
+        .calculator-container {
+          padding: 1.5rem;
+        }
+
+        h1 {
+          font-size: 1.8rem;
+        }
+
+        .input-group input,
+        .input-group select {
+          padding: 0.7rem;
+        }
+
+        button {
+          padding: 0.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calculator-container">
+        <a href="index.html"><button>Go Home</button></a>
+      <h1>Sales Tax Calculator</h1>
+      <div class="input-group">
+        <label for="state">Select State</label>
+        <select id="state">
+          <option value="">-- Select a State --</option>
+          <!-- States will be populated by JavaScript -->
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="amount">Purchase Amount ($)</label>
+        <input
+          type="number"
+          id="amount"
+          placeholder="Enter purchase amount"
+        />
+      </div>
+      <div class="input-group">
+        <label for="custom-rate">Custom Tax Rate (%)</label>
+        <input
+          type="number"
+          id="custom-rate"
+          placeholder="Enter custom tax rate"
+        />
+      </div>
+      <div class="rate-display" id="rate-display">
+        Current Tax Rate: <span id="current-rate">0.00%</span>
+      </div>
+      <button onclick="calculateSalesTax()">Calculate Sales Tax</button>
+      <div class="results" id="results">
+        <p>Sales Tax: <span id="sales-tax">$0.00</span></p>
+        <p>Total Amount: <span id="total-amount">$0.00</span></p>
+      </div>
+    </div>
+
+    <script>
+      // Database of all 50 states' sales tax rates (as of 2023)
+      const stateTaxRates = {
+        AL: 4.0, // Alabama
+        AK: 0.0, // Alaska
+        AZ: 5.6, // Arizona
+        AR: 6.5, // Arkansas
+        CA: 7.25, // California
+        CO: 2.9, // Colorado
+        CT: 6.35, // Connecticut
+        DE: 0.0, // Delaware
+        FL: 6.0, // Florida
+        GA: 4.0, // Georgia
+        HI: 4.0, // Hawaii
+        ID: 6.0, // Idaho
+        IL: 6.25, // Illinois
+        IN: 7.0, // Indiana
+        IA: 6.0, // Iowa
+        KS: 6.5, // Kansas
+        KY: 6.0, // Kentucky
+        LA: 4.45, // Louisiana
+        ME: 5.5, // Maine
+        MD: 6.0, // Maryland
+        MA: 6.25, // Massachusetts
+        MI: 6.0, // Michigan
+        MN: 6.875, // Minnesota
+        MS: 7.0, // Mississippi
+        MO: 4.225, // Missouri
+        MT: 0.0, // Montana
+        NE: 5.5, // Nebraska
+        NV: 6.85, // Nevada
+        NH: 0.0, // New Hampshire
+        NJ: 6.625, // New Jersey
+        NM: 5.125, // New Mexico
+        NY: 4.0, // New York
+        NC: 4.75, // North Carolina
+        ND: 5.0, // North Dakota
+        OH: 5.75, // Ohio
+        OK: 4.5, // Oklahoma
+        OR: 0.0, // Oregon
+        PA: 6.0, // Pennsylvania
+        RI: 7.0, // Rhode Island
+        SC: 6.0, // South Carolina
+        SD: 4.5, // South Dakota
+        TN: 7.0, // Tennessee
+        TX: 6.25, // Texas
+        UT: 6.1, // Utah
+        VT: 6.0, // Vermont
+        VA: 5.3, // Virginia
+        WA: 6.5, // Washington
+        WV: 6.0, // West Virginia
+        WI: 5.0, // Wisconsin
+        WY: 4.0, // Wyoming
+      };
+
+      // Populate the state dropdown
+      const stateSelect = document.getElementById('state');
+      for (const [stateCode, taxRate] of Object.entries(stateTaxRates)) {
+        const option = document.createElement('option');
+        option.value = taxRate;
+        option.textContent = stateCode;
+        stateSelect.appendChild(option);
+      }
+
+      // Update the displayed tax rate when the state or custom rate changes
+      const updateRateDisplay = () => {
+        const stateRate = parseFloat(document.getElementById('state').value);
+        const customRate = parseFloat(document.getElementById('custom-rate').value);
+        const currentRate = isNaN(customRate) ? stateRate : customRate;
+        document.getElementById('current-rate').textContent = `${currentRate.toFixed(2)}%`;
+      };
+
+      document.getElementById('state').addEventListener('change', updateRateDisplay);
+      document.getElementById('custom-rate').addEventListener('input', updateRateDisplay);
+
+      function calculateSalesTax() {
+        // Get input values
+        const purchaseAmount = parseFloat(document.getElementById('amount').value);
+        const stateRate = parseFloat(document.getElementById('state').value);
+        const customRate = parseFloat(document.getElementById('custom-rate').value);
+        const taxRate = isNaN(customRate) ? stateRate : customRate;
+
+        // Validate inputs
+        if (isNaN(purchaseAmount) || purchaseAmount <= 0) {
+          alert('Please enter a valid purchase amount.');
+          return;
+        }
+        if (isNaN(taxRate) || taxRate < 0) {
+          alert('Please select a state or enter a valid custom tax rate.');
+          return;
+        }
+
+        // Calculate sales tax and total amount
+        const salesTax = (purchaseAmount * taxRate) / 100;
+        const totalAmount = purchaseAmount + salesTax;
+
+        // Display results
+        document.getElementById('sales-tax').textContent =
+          '$' + salesTax.toFixed(2);
+        document.getElementById('total-amount').textContent =
+          '$' + totalAmount.toFixed(2);
+      }
+    </script>
+  </body>
+</html>
