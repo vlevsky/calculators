@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Discount Calculator</title>
+    <style>
+      /* General Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        color: #333;
+      }
+
+      .calculator-container {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 2.5rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        color: #444;
+        font-weight: 600;
+      }
+
+      .input-group {
+        margin-bottom: 1.5rem;
+        text-align: left;
+      }
+
+      .input-group label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: #555;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .input-group input:focus {
+        border-color: #6a11cb;
+        outline: none;
+        box-shadow: 0 0 8px rgba(106, 17, 203, 0.3);
+      }
+
+      .results {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .results p {
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+        color: #444;
+      }
+
+      .results p span {
+        font-weight: 600;
+        color: #6a11cb;
+      }
+
+      button {
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+      }
+
+      button:active {
+        transform: translateY(0);
+        box-shadow: 0 3px 10px rgba(106, 17, 203, 0.4);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 480px) {
+        .calculator-container {
+          padding: 1.5rem;
+        }
+
+        h1 {
+          font-size: 1.8rem;
+        }
+
+        .input-group input {
+          padding: 0.7rem;
+        }
+
+        button {
+          padding: 0.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calculator-container">
+        <a href="index.html"><button>Go Home</button></a>
+      <h1>Discount Calculator</h1>
+      <div class="input-group">
+        <label for="original-price">Original Price ($)</label>
+        <input
+          type="number"
+          id="original-price"
+          placeholder="Enter original price"
+        />
+      </div>
+      <div class="input-group">
+        <label for="discount-percentage">Discount Percentage (%)</label>
+        <input
+          type="number"
+          id="discount-percentage"
+          placeholder="Enter discount percentage"
+        />
+      </div>
+      <button onclick="calculateDiscount()">Calculate Discount</button>
+      <div class="results" id="results">
+        <p>Discounted Price: <span id="discounted-price">$0.00</span></p>
+        <p>You Save: <span id="savings">$0.00</span></p>
+      </div>
+    </div>
+
+    <script>
+      function calculateDiscount() {
+        // Get input values
+        const originalPrice = parseFloat(
+          document.getElementById('original-price').value
+        );
+        const discountPercentage = parseFloat(
+          document.getElementById('discount-percentage').value
+        );
+
+        // Validate inputs
+        if (isNaN(originalPrice) || originalPrice <= 0) {
+          alert('Please enter a valid original price.');
+          return;
+        }
+        if (isNaN(discountPercentage) || discountPercentage < 0 || discountPercentage > 100) {
+          alert('Please enter a valid discount percentage (0-100).');
+          return;
+        }
+
+        // Calculate discounted price and savings
+        const discountAmount = (originalPrice * discountPercentage) / 100;
+        const discountedPrice = originalPrice - discountAmount;
+
+        // Display results
+        document.getElementById('discounted-price').textContent =
+          '$' + discountedPrice.toFixed(2);
+        document.getElementById('savings').textContent =
+          '$' + discountAmount.toFixed(2);
+      }
+    </script>
+  </body>
+</html>
