@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trigonometry Calculator</title>
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
+    }
+
+    .calculator {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      color: #444;
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      color: #555;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .input-group input:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .buttons button {
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #007bff;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .buttons button:hover {
+      background-color: #0056b3;
+    }
+
+    .result {
+      margin-top: 1.5rem;
+    }
+
+    .result h2 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: #444;
+    }
+
+    #result {
+      font-size: 1.2rem;
+      color: #007bff;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <a href="index.html"><button>Go Home</button></a>
+    <h1>Trigonometry Calculator</h1>
+    <div class="input-group">
+      <label for="angle">Enter Value:</label>
+      <input type="number" id="angle" placeholder="Enter value">
+    </div>
+    <div class="buttons">
+      <button onclick="calculateSin()">sin</button>
+      <button onclick="calculateCos()">cos</button>
+      <button onclick="calculateTan()">tan</button>
+      <button onclick="calculateSec()">sec</button>
+      <button onclick="calculateCsc()">csc</button>
+      <button onclick="calculateCot()">cot</button>
+      <button onclick="calculateAsin()">sin<sup>-1</sup></button>
+      <button onclick="calculateAcos()">cos<sup>-1</sup></button>
+      <button onclick="calculateAtan()">tan<sup>-1</sup></button>
+      <button onclick="calculateAsec()">sec<sup>-1</sup></button>
+      <button onclick="calculateAcsc()">csc<sup>-1</sup></button>
+      <button onclick="calculateAcot()">cot<sup>-1</sup></button>
+    </div>
+    <div class="result">
+      <h2>Result:</h2>
+      <p id="result"></p>
+    </div>
+  </div>
+
+  <script>
+    const angleInput = document.getElementById('angle');
+    const resultElement = document.getElementById('result');
+
+    // Helper function to convert degrees to radians
+    function toRadians(degrees) {
+      return degrees * (Math.PI / 180);
+    }
+
+    // Helper function to convert radians to degrees
+    function toDegrees(radians) {
+      return radians * (180 / Math.PI);
+    }
+
+    // Basic Trigonometric Functions
+    function calculateSin() {
+      const angle = parseFloat(angleInput.value);
+      const radians = toRadians(angle);
+      const result = Math.sin(radians);
+      resultElement.textContent = `sin(${angle}°) = ${result.toFixed(4)}`;
+    }
+
+    function calculateCos() {
+      const angle = parseFloat(angleInput.value);
+      const radians = toRadians(angle);
+      const result = Math.cos(radians);
+      resultElement.textContent = `cos(${angle}°) = ${result.toFixed(4)}`;
+    }
+
+    function calculateTan() {
+      const angle = parseFloat(angleInput.value);
+      const radians = toRadians(angle);
+      const result = Math.tan(radians);
+      resultElement.textContent = `tan(${angle}°) = ${result.toFixed(4)}`;
+    }
+
+    function calculateSec() {
+      const angle = parseFloat(angleInput.value);
+      const radians = toRadians(angle);
+      const result = 1 / Math.cos(radians);
+      resultElement.textContent = `sec(${angle}°) = ${result.toFixed(4)}`;
+    }
+
+    function calculateCsc() {
+      const angle = parseFloat(angleInput.value);
+      const radians = toRadians(angle);
+      const result = 1 / Math.sin(radians);
+      resultElement.textContent = `csc(${angle}°) = ${result.toFixed(4)}`;
+    }
+
+    function calculateCot() {
+      const angle = parseFloat(angleInput.value);
+      const radians = toRadians(angle);
+      const result = 1 / Math.tan(radians);
+      resultElement.textContent = `cot(${angle}°) = ${result.toFixed(4)}`;
+    }
+
+    // Inverse Trigonometric Functions
+    function calculateAsin() {
+      const value = parseFloat(angleInput.value);
+      if (value < -1 || value > 1) {
+        resultElement.textContent = "Invalid input for sin⁻¹ (must be between -1 and 1)";
+        return;
+      }
+      const radians = Math.asin(value);
+      const degrees = toDegrees(radians);
+      resultElement.textContent = `sin⁻¹(${value}) = ${degrees.toFixed(4)}°`;
+    }
+
+    function calculateAcos() {
+      const value = parseFloat(angleInput.value);
+      if (value < -1 || value > 1) {
+        resultElement.textContent = "Invalid input for cos⁻¹ (must be between -1 and 1)";
+        return;
+      }
+      const radians = Math.acos(value);
+      const degrees = toDegrees(radians);
+      resultElement.textContent = `cos⁻¹(${value}) = ${degrees.toFixed(4)}°`;
+    }
+
+    function calculateAtan() {
+      const value = parseFloat(angleInput.value);
+      const radians = Math.atan(value);
+      const degrees = toDegrees(radians);
+      resultElement.textContent = `tan⁻¹(${value}) = ${degrees.toFixed(4)}°`;
+    }
+
+    function calculateAsec() {
+      const value = parseFloat(angleInput.value);
+      if (Math.abs(value) < 1) {
+        resultElement.textContent = "Invalid input for sec⁻¹ (|value| must be ≥ 1)";
+        return;
+      }
+      const radians = Math.acos(1 / value);
+      const degrees = toDegrees(radians);
+      resultElement.textContent = `sec⁻¹(${value}) = ${degrees.toFixed(4)}°`;
+    }
+
+    function calculateAcsc() {
+      const value = parseFloat(angleInput.value);
+      if (Math.abs(value) < 1) {
+        resultElement.textContent = "Invalid input for csc⁻¹ (|value| must be ≥ 1)";
+        return;
+      }
+      const radians = Math.asin(1 / value);
+      const degrees = toDegrees(radians);
+      resultElement.textContent = `csc⁻¹(${value}) = ${degrees.toFixed(4)}°`;
+    }
+
+    function calculateAcot() {
+      const value = parseFloat(angleInput.value);
+      const radians = Math.atan(1 / value);
+      const degrees = toDegrees(radians);
+      resultElement.textContent = `cot⁻¹(${value}) = ${degrees.toFixed(4)}°`;
+    }
+  </script>
+</body>
+</html>
